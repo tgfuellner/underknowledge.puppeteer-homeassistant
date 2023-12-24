@@ -22,12 +22,12 @@ ENV READING_DURATION $READING_DURATION
 # Install Google Chrome Stable and fonts
 # Note: this installs the necessary libs to make the browser work with Puppeteer.
 
-RUN apt-get update && apt-get install curl gnupg imagemagick openssh-client sshpass netcat nano -y \
+RUN apt-get update && apt-get install curl gnupg graphicsmagick-imagemagick-compat openssh-client sshpass netcat-traditional vim -y \
   && curl --location --silent https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list' \
   && apt-get update \
   && apt-get install google-chrome-stable -y --no-install-recommends \
-  && apt-get install imagemagick \
+  && apt-get install graphicsmagick-imagemagick-compat \
   && rm -rf /var/lib/apt/lists/*
 
 # Todo: Warings to be fixed 

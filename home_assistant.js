@@ -1,8 +1,9 @@
 const puppeteer = require('puppeteer');
 
-const login_page = process.env.login_page || "https://homeassistant.underknowledge.cc/";
-const login_username = process.env.login_username || "root";
-const login_password = process.env.login_password || "un52SDvVfVOscyRVKi0D46p4NPbd8GXrDXFtHSd";
+//const login_page = process.env.login_page || "https://homeassistant.underknowledge.cc/";
+const login_page = "http://192.168.0.2:8123/lovelace-erzeuger/kindle600x800?kiosk";
+const login_username = process.env.login_username || "thomas";
+const login_password = process.env.login_password || "bausteln";
 
 
 //login_page="https://homeassistant.underknowledge.cc/" login_username="root" login_password="un52SDvVfVOscyRVKi0D46p4NPbd8GXrDXFtHSd" ha_test.js
@@ -20,27 +21,31 @@ function sleep(ms) {
   ignoreHTTPSErrors: false,
   });
   const page = await browser.newPage();
+
+  console.log("---------login_page", login_page);
   await page.goto(login_page, { waitUntil: 'networkidle0' });
 
   // find shadow elements by js selector
   // https://github.com/puppeteer/puppeteer/issues/858#issuecomment-438540596
 // const username = await page.evaluateHandle(`document.querySelector("body > div > ha-authorize").shadowRoot.querySelector("ha-auth-flow").shadowRoot.querySelector("form > ha-form").shadowRoot.querySelector("div > ha-form-string:nth-child(1)").shadowRoot.querySelector("mwc-textfield").shadowRoot.querySelector("label > input")`);
-  const username = await page.evaluateHandle(`document.querySelector("body > div > ha-authorize").shadowRoot.querySelector("ha-auth-flow").shadowRoot.querySelector("form > ha-form").shadowRoot.querySelector("div > ha-form-string:nth-child(1)").shadowRoot.querySelector("ha-textfield").shadowRoot.querySelector("label > input")`);
+  //const username = await page.evaluateHandle(`document.querySelector("body > div > ha-authorize").shadowRoot.querySelector("ha-auth-flow").shadowRoot.querySelector("form > ha-form").shadowRoot.querySelector("div > ha-form-string:nth-child(1)").shadowRoot.querySelector("ha-textfield").shadowRoot.querySelector("label > input")`);
+  const username = await page.evaluateHandle(`document.querySelector("body > div > ha-authorize > ha-auth-flow > form > ha-auth-form > div > ha-auth-form-string:nth-child(1) > ha-auth-textfield > label > input")`);
   await username.type(login_username);
 
-  const password = await page.evaluateHandle(`document.querySelector("body > div > ha-authorize").shadowRoot.querySelector("ha-auth-flow").shadowRoot.querySelector("form > ha-form").shadowRoot.querySelector("div > ha-form-string:nth-child(2)").shadowRoot.querySelector("ha-textfield").shadowRoot.querySelector("label > input")`);
+  const password = await page.evaluateHandle(`document.querySelector("body > div > ha-authorize > ha-auth-flow > form > ha-auth-form > div > ha-auth-form-string:nth-child(2) > ha-auth-textfield > label > input")`);
   await password.type(login_password);
 
-  const loginHandle = await page.evaluateHandle(`document.querySelector("body > div > ha-authorize").shadowRoot.querySelector("ha-auth-flow").shadowRoot.querySelector("form > div > mwc-button")`);
+  const loginHandle = await page.evaluateHandle(`document.querySelector("body > div > ha-authorize > ha-auth-flow > form > div > mwc-button")`);
   await loginHandle.click();
 
     // Set width.
     // 758x1024
   // await page.setViewport({ width: 1920, height: 600 });
 
-  const desiredWidth = 758;
-  const desiredHeight = 1024;
-  const ScaleFactor = 1.35;
+  const desiredWidth = 600;
+  const desiredHeight = 800;
+  //const ScaleFactor = 1.35;
+  const ScaleFactor = 1;
 
   await page.setViewport({ width: parseInt(desiredWidth / ScaleFactor), 
                            height: parseInt(desiredHeight / ScaleFactor), 

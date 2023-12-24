@@ -17,21 +17,22 @@ if nc -z -w 1 ${KINDLE_IP} 22 ; then
   # Run pupeteer
   node home_assistant.js
   # Convert to a nice grayscale, while theoreticaly the kindle could work this out byhimself, it looks ugly
-  convert home_assistant.png -depth 4 -colorspace gray -define png:color-type=0 -define png:bit-depth=8 home_assistant_8bit.png
+  # convert home_assistant.png -depth 1 -colorspace gray -define png:color-type=0 -define png:bit-depth=8 home_assistant_8bit.png
+  convert home_assistant.png -rotate 180 -depth 4 -colorspace gray home_assistant_8bit.jpg
 
   TIME=$(date +"%M")
   # Clear the display every 10 minutes https://superuser.com/a/49786
   if [ $(( $TIME % 10 )) -eq 0 ]
   then 
-    sshpass -p "${KINDLE_PASSWORD}" ssh root@${KINDLE_IP} 'eips -c; eips -c'
+    sshpass -p "${KINDLE_PASSWORD}" ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${KINDLE_IP} 'eips -c; eips -c'
   else
     # echo "$(date +"%M") is not divisible by 10, No screen clear"
     true
   fi
   # Copy the picture
-  sshpass -p "${KINDLE_PASSWORD}" scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no home_assistant_8bit.png root@${KINDLE_IP}:/mnt/us/documents/ && echo copyed || echo "issue copying to kindle"
+  sshpass -p "${KINDLE_PASSWORD}" scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no home_assistant_8bit.jpg root@${KINDLE_IP}:/mnt/us/documents/ && echo copyed || echo "issue copying to kindle"
   # Set the picture 
-  sshpass -p "${KINDLE_PASSWORD}" ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${KINDLE_IP} 'eips -g /mnt/us/documents/home_assistant_8bit.png' > /dev/null 2>&1
+  sshpass -p "${KINDLE_PASSWORD}" ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@${KINDLE_IP} 'eips -g /mnt/us/documents/home_assistant_8bit.jpg' > /dev/null 2>&1
 else
   echo "Kindle not connected to the Network, or it has now another IP"
   exit 0

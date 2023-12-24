@@ -53,6 +53,10 @@ If you want to use your reader, set the brightness to maximum until the next pic
 If the Reader brightness is above `240`, the script will sleep as long as you set your `$READING_DURATION`. 
 you can use the options of sleep (`60, 60s, 1m, 2h, ...`) 
 
+
+# Debuging
+docker-compose run --entrypoint bash pupeteer
+
 # Updating 
 
 As long as Pascal of Frenk not change the shaddow root again, hopefully it will stay like this for quite a while! (because it purrs like a kitten)
